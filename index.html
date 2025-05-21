@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Beekeep Game</title>
+    <style>
+      body {
+        font-family: sans-serif;
+        padding: 20px;
+      }
+      button {
+        margin: 5px;
+        padding: 10px 20px;
+      }
+      .stats {
+        margin-top: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Beekeep Game</h1>
+
+    <div>
+      <button onclick="collectPollen()">Collect Pollen 🌼</button><br />
+    </div>
+
+    <div>
+      <button onclick="makeHoney()">Make Honey 🍯</button><br />
+      <small>Cost : 10 Pollen</small>
+    </div>
+
+    <div>
+      <button onclick="sellHoney()">Sell Honey 💰</button><br />
+      <small>Price per honey : $5</small>
+    </div>
+
+    <div>
+      <button onclick="buyBee()">Buy Bee 🐝 ($50)</button><br />
+      <small>Pollen per seconds : 2s</small>
+    </div>
+
+    <div class="stats">
+      <p>Pollen: <span id="pollen">0</span></p>
+      <p>Honey: <span id="honey">0</span></p>
+      <p>Money: $<span id="money">0</span></p>
+      <p>Bees: <span id="bees">0</span></p>
+    </div>
+
+    <script>
+      let pollen = 0;
+      let honey = 0;
+      let money = 0;
+      let bees = 0;
+
+      function updateUI() {
+        document.getElementById("pollen").innerText = pollen;
+        document.getElementById("honey").innerText = honey;
+        document.getElementById("money").innerText = money;
+        document.getElementById("bees").innerText = bees;
+      }
+
+      function collectPollen() {
+        pollen++;
+        updateUI();
+      }
+
+      function makeHoney() {
+        if (pollen >= 10) {
+          let batches = Math.floor(pollen / 10);
+          pollen -= batches * 10;
+          honey += batches;
+          updateUI();
+        } else {
+        }
+      }
+
+      function sellHoney() {
+        if (honey > 0) {
+          money += honey * 5;
+          honey = 0;
+          updateUI();
+        } else {
+        }
+      }
+
+      function buyBee() {
+        if (money >= 50) {
+          money -= 50;
+          bees++;
+          updateUI();
+        } else {
+        }
+      }
+
+      setInterval(() => {
+        pollen += bees;
+        updateUI();
+      }, 2000);
+    </script>
+  </body>
+</html>
