@@ -2,20 +2,9 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>Beekeep Game</title>
-    <style>
-      body {
-        font-family: sans-serif;
-        padding: 20px;
-      }
-      button {
-        margin: 5px;
-        padding: 10px 20px;
-      }
-      .stats {
-        margin-top: 20px;
-      }
-    </style>
+    <title>Beekeep</title>
+    <link rel="stylesheet" href="/docs/style.css">
+    <link rel="icon" type="image/x-icon" href="/docs/fav.png">
   </head>
   <body>
     <h1>Beekeep Game</h1>
@@ -36,7 +25,7 @@
 
     <div>
       <button onclick="buyBee()">Buy Bee($50)</button><br />
-      <small>Pollen per seconds : 0.5</small>
+      <small>Pollen per second : 0.5</small>
     </div>
 
     <div class="stats">
@@ -46,56 +35,6 @@
       <p>Bees: <span id="bees">0</span></p>
     </div>
 
-    <script>
-      let pollen = 0;
-      let honey = 0;
-      let money = 0;
-      let bees = 0;
-
-      function updateUI() {
-        document.getElementById("pollen").innerText = pollen;
-        document.getElementById("honey").innerText = honey;
-        document.getElementById("money").innerText = money;
-        document.getElementById("bees").innerText = bees;
-      }
-
-      function collectPollen() {
-        pollen++;
-        updateUI();
-      }
-
-      function makeHoney() {
-        if (pollen >= 10) {
-          let batches = Math.floor(pollen / 10);
-          pollen -= batches * 10;
-          honey += batches;
-          updateUI();
-        } else {
-        }
-      }
-
-      function sellHoney() {
-        if (honey > 0) {
-          money += honey * 5;
-          honey = 0;
-          updateUI();
-        } else {
-        }
-      }
-
-      function buyBee() {
-        if (money >= 50) {
-          money -= 50;
-          bees++;
-          updateUI();
-        } else {
-        }
-      }
-
-      setInterval(() => {
-        pollen += bees;
-        updateUI();
-      }, 2000);
-    </script>
+    <script src="/docs/script.js"></script>
   </body>
 </html>
