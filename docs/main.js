@@ -1,4 +1,4 @@
-var gameData = {
+let gameData = {
   pollen: 0,
   pollenperclick: 1,
   honey: 0,
@@ -21,6 +21,7 @@ function makeHoney() {
     gameData.honey += 1
     document.getElementById("nbHoney").innerHTML = "Honey: " + gameData.honey
     document.getElementById("nbPollen").innerHTML = "Pollen: " + gameData.pollen
+    logToConsole("Made honey");
   }
 }
 
@@ -30,6 +31,7 @@ function sellHoney() {
     gameData.money += gameData.honeyValue
     document.getElementById("nbMoney").innerHTML = "Money: $" + gameData.money
     document.getElementById("nbHoney").innerHTML = "Honey: " + gameData.honey
+    logToConsole("Sold honey");
   }
 }
 
@@ -41,6 +43,7 @@ function buyBee() {
     document.getElementById("nbMoney").innerHTML = "Money: $" + gameData.money;
     document.getElementById("bees").innerHTML = gameData.bees;
     document.getElementById("PollenPerSec").innerHTML = "Pollen Per Second: " + gameData.pollenPerBees;
+    logToConsole("Bought a bee");
   }
 }
 
@@ -51,10 +54,10 @@ setInterval(() => {
 
 function saveGame() {
   localStorage.setItem("beekeepSave", JSON.stringify(gameData));
+  logToConsole("Game saved");
 }
 
-setInterval(saveGame, 5000);
-
+setInterval(saveGame, 30000);
 
 function loadGame() {
   const savedGame = localStorage.getItem("beekeepSave");
@@ -66,7 +69,15 @@ function loadGame() {
     document.getElementById("nbMoney").innerHTML = "Money: $" + gameData.money;
     document.getElementById("bees").innerHTML = gameData.bees;
     document.getElementById("PollenPerSec").innerHTML = "Pollen Per Second: " + gameData.pollenPerBees;
+    logToConsole("Game loaded");
   }
 }
 
 loadGame();
+
+function logToConsole(message) {
+  const consoleDiv = document.getElementById("gameConsole");
+  const timestamp = new Date().toLocaleTimeString();
+  consoleDiv.innerHTML += `> ${message}<br />`;
+  consoleDiv.scrollTop = consoleDiv.scrollHeight;
+}

@@ -7,6 +7,10 @@
     <link rel="icon" type="image/x-icon" href="./docs/fav.png" />
   </head>
   <body>
+    <div id="gameConsole" class="console">
+      <strong>Game Log:</strong><br />
+    </div>
+
     <div class="container">
       <h2>
         <p id="nbPollen">Pollen: 0</p>
@@ -18,17 +22,26 @@
         <p id="PollenPerSec">Pollen Per Second: 0</p>
         <p id="nbHoney">Honey: 0</p>
         <button onclick="makeHoney()">Make Honey</button>
-        <small>Cost: 10 Pollen</small>
+        <medium>Cost: 10 Pollen</medium>
       </div>
 
       <div class="section">
         <h3>Business</h3>
         <p id="nbMoney">Money: $0</p>
-        <p>Bees: <span id="bees">0</span></p>
         <button onclick="sellHoney()">Sell Honey</button>
-        <small>Price per honey: $5</small><br /><br />
-        <button onclick="buyBee()">Buy Bee ($50)</button>
+        <medium>Price per honey: $5</medium><br /><br />
+        <button onclick="buyBee()">Bees</button>
+        <span id="bees">0</span><br />
+        <medium>Cost: $50</medium>
       </div>
+    </div>
+
+      <footer>
+        <button onclick="saveGame()">Save</button>
+        <button onclick="loadGame()">Load</button>
+        <button onclick="localStorage.clear(); location.reload();">Reset Game</button>
+        <p id="saveStatus"></p>
+      </footer>
 
     <script src="./docs/main.js"></script>
   </body>
