@@ -3,38 +3,33 @@
   <head>
     <meta charset="UTF-8" />
     <title>Beekeep</title>
-    <link rel="stylesheet" href="./docs/style.css">
-    <link rel="icon" type="image/x-icon" href="./docs/fav.png">
+    <link rel="stylesheet" href="./docs/style.css" />
+    <link rel="icon" type="image/x-icon" href="./docs/fav.png" />
   </head>
   <body>
-    <h1>Beekeep Game</h1>
-
-    <div>
+    <div class="container">
+      <h2>
+        <p id="nbPollen">Pollen: 0</p>
+      </h2>
       <button onclick="collectPollen()">Collect Pollen</button><br />
-    </div>
 
-    <div>
-      <button onclick="makeHoney()">Make Honey</button><br />
-      <small>Cost : 10 Pollen</small>
-    </div>
+      <div class="section">
+        <h3>Manufacture</h3>
+        <p id="PollenPerSec">Pollen Per Second: 0</p>
+        <p id="nbHoney">Honey: 0</p>
+        <button onclick="makeHoney()">Make Honey</button>
+        <small>Cost: 10 Pollen</small>
+      </div>
 
-    <div>
-      <button onclick="sellHoney()">Sell Honey</button><br />
-      <small>Price per honey : $5</small>
-    </div>
+      <div class="section">
+        <h3>Business</h3>
+        <p id="nbMoney">Money: $0</p>
+        <p>Bees: <span id="bees">0</span></p>
+        <button onclick="sellHoney()">Sell Honey</button>
+        <small>Price per honey: $5</small><br /><br />
+        <button onclick="buyBee()">Buy Bee ($50)</button>
+      </div>
 
-    <div>
-      <button onclick="buyBee()">Buy Bee($50)</button><br />
-      <small>Pollen per second : 0.5</small>
-    </div>
-
-    <div class="stats">
-      <p>Pollen: <span id="pollen">0</span></p>
-      <p>Honey: <span id="honey">0</span></p>
-      <p>Money: $<span id="money">0</span></p>
-      <p>Bees: <span id="bees">0</span></p>
-    </div>
-
-    <script src="./docs/script.js"></script>
+    <script src="./docs/main.js"></script>
   </body>
 </html>
