@@ -7,9 +7,11 @@ let gameData = {
   money: 0,
   bees: 0,
   beeCost: 50,
+  beeCostGrowth: 1.15,
   pollenPerBees: 0,
   queens: 0,
   queenCost: 500,
+  queenCostGrowth: 1.25,
   queenMultiplier: 2,
 }
 
@@ -45,29 +47,30 @@ function sellHoney() {
 
 
 function buyBee() {
-  const maxBees = Math.floor(gameData.money / gameData.beeCost);
-  if (maxBees > 0) {
-    gameData.bees += maxBees;
-    gameData.money -= maxBees * gameData.beeCost;
-    recalculatePollenPerBees();
-
+  if (gameData.money >= gameData.beeCost) {
+    gameData.money -= gameData.beeCost
+    gameData.bees += 1
+    gameData.pollenPerBees += 1
+    gameData.beeCost = Math.floor(gameData.beeCost * gameData.beeCostGrowth)
     document.getElementById("nbMoney").innerHTML = "Money: $" + gameData.money;
     document.getElementById("bees").innerHTML = gameData.bees;
-    logToConsole(`Bought ${maxBees} bee(s)`);
+    document.getElementById("PollenPerSec").innerHTML = "Pollen Per Second: " + gameData.pollenPerBees;
+    document.getElementById("beeCost").innerHTML = "Cost: $" + gameData.beeCost;
+    logToConsole("Bought a bee");
   }
 }
 
 
 function buyQueen() {
-  const maxQueens = Math.floor(gameData.money / gameData.queenCost);
-  if (maxQueens > 0) {
-    gameData.queens += maxQueens;
-    gameData.money -= maxQueens * gameData.queenCost;
+  if (gameData.money >= gameData.queenCost) {
+    gameData.money -= gameData.queenCost;
+    gameData.queens += 1;
+    gameData.queenCost = Math.floor(gameData.queenCost * gameData.queenCostGrowth);
     recalculatePollenPerBees();
-
     document.getElementById("nbMoney").innerHTML = "Money: $" + gameData.money;
     document.getElementById("queens").innerHTML = gameData.queens;
-    logToConsole(`Bought ${maxQueens} queen(s)`);
+    document.getElementById("queenCost").innerHTML = "Cost: $" + gameData.queenCost;
+    logToConsole("Bought a queen");
   }
 }
 
