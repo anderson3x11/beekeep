@@ -7,8 +7,8 @@
     <link rel="icon" type="image/x-icon" href="./docs/fav.png" />
   </head>
   <body>
-    <div id="gameConsole" class="console"><strong>Game Log:</strong><br /></div>
-    <div>
+    <div id="gameConsole" class="console"><strong>> Welcome to Beekeep !</strong><br /></div>
+    <div class="saveLoad">
       <button onclick="saveGame()">Save</button>
       <button onclick="loadGame()">Load</button>
       <button onclick="localStorage.clear(); location.reload();">Reset Game</button>
@@ -17,23 +17,26 @@
 
     <div class="container">
       <h2>
-        <p id="nbPollen">Pollen: 0</p>
+        <p id="nbPollen">Pollen: 1000</p>
       </h2>
       <button onclick="collectPollen()">Collect Pollen</button><br />
 
       <div class="section">
         <h3>Production</h3>
-        <p id="PollenPerSec">Pollen Per Second: 0</p>
-        <p id="nbHoney">Honey: 0</p>
+        <medium id="PollenPerSec">Pollen Per Second: 0</medium><br />
+        <medium id="nbHoney">Honey: 0</medium><br />
         <button onclick="makeHoney()">Make Honey</button>
-        <medium>Cost: 10 Pollen</medium>
+        <medium>Require: 10 Pollen</medium>
       </div>
 
       <div class="section">
         <h3>Business</h3>
-        <p id="nbMoney">Money: $0</p>
+        <medium id="nbMoney">Money: $0</medium><br />
         <button onclick="sellHoney()">Sell Honey</button>
-        <medium>Price per honey: $5</medium><br /><br />
+        <medium id="honeyValue">Price per honey: $5</medium><br />
+        <button onclick="makeMarketing()">Marketing</button>
+        <medium id="marketingLevel"></medium><br />
+        <medium id="marketingCost">Cost: $100</medium><br />
         <button onclick="buyBee()">Bees</button>
         <span id="bees">0</span><br />
         <medium id="beeCost">Cost: $50</medium><br />

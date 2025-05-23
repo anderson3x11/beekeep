@@ -12,6 +12,10 @@ body {
   overflow-y:auto;
 }
 
+.saveLoad {
+  border-bottom: 1px solid #aaa;
+}
+
 .container {
   max-width: 600px;
 }
@@ -26,8 +30,4 @@ body {
 }
 button {
   margin: 5px 0;
-}
-
-footer {
-  margin-top: 100px;
 }

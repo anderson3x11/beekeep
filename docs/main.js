@@ -1,9 +1,12 @@
 let gameData = {
-  pollen: 0,
+  pollen: 1000,
   pollenperclick: 1,
   honey: 0,
   honeyCost: 10,
   honeyValue: 5,
+  marketingLevel: 0,
+  marketingCost: 100,
+  marketingCostGrowth: 1.5,
   money: 0,
   bees: 0,
   beeCost: 50,
@@ -32,7 +35,6 @@ function makeHoney() {
   }
 }
 
-
 function sellHoney() {
   const maxSell = gameData.honey;
   if (maxSell > 0) {
@@ -42,6 +44,21 @@ function sellHoney() {
     document.getElementById("nbMoney").innerHTML = "Money: $" + gameData.money;
     document.getElementById("nbHoney").innerHTML = "Honey: " + gameData.honey;
     logToConsole(`Sold ${maxSell} honey`);
+  }
+}
+
+function makeMarketing() {
+  if (gameData.money >= gameData.marketingCost) {
+    gameData.money -= gameData.marketingCost;
+    gameData.marketingLevel += 1;
+    gameData.honeyValue += 1;
+    gameData.marketingCost = Math.ceil(gameData.marketingCost * gameData.marketingCostGrowth);
+
+    document.getElementById("nbMoney").innerHTML = "Money: $" + gameData.money;
+    document.getElementById("honeyValue").innerHTML = "Price per honey: $" + gameData.honeyValue;
+    document.getElementById("marketingLevel").innerHTML = "Level: " + gameData.marketingLevel;
+    document.getElementById("marketingCost").innerHTML = "Cost: $" + gameData.marketingCost;
+    logToConsole(`Invested in marketing. Honey now sells for $${gameData.honeyValue}`);
   }
 }
 
@@ -88,7 +105,6 @@ setInterval(() => {
 
 function saveGame() {
   localStorage.setItem("beekeepSave", JSON.stringify(gameData));
-  logToConsole("Game saved");
 }
 
 setInterval(saveGame, 30000);
