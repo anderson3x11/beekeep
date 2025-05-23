@@ -48,3 +48,25 @@ setInterval(() => {
   gameData.pollen += gameData.pollenPerBees;
   document.getElementById("nbPollen").innerHTML = "Pollen: " + gameData.pollen;
 }, 1000);
+
+function saveGame() {
+  localStorage.setItem("beekeepSave", JSON.stringify(gameData));
+}
+
+setInterval(saveGame, 5000);
+
+
+function loadGame() {
+  const savedGame = localStorage.getItem("beekeepSave");
+  if (savedGame) {
+    gameData = JSON.parse(savedGame);
+
+    document.getElementById("nbPollen").innerHTML = "Pollen: " + gameData.pollen;
+    document.getElementById("nbHoney").innerHTML = "Honey: " + gameData.honey;
+    document.getElementById("nbMoney").innerHTML = "Money: $" + gameData.money;
+    document.getElementById("bees").innerHTML = gameData.bees;
+    document.getElementById("PollenPerSec").innerHTML = "Pollen Per Second: " + gameData.pollenPerBees;
+  }
+}
+
+loadGame();
