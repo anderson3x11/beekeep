@@ -1,5 +1,5 @@
 let gameData = {
-  pollen: 1000,
+  pollen: 0,
   pollenperclick: 1,
   honey: 0,
   honeyCost: 10,
