@@ -7,8 +7,12 @@
     <link rel="icon" type="image/x-icon" href="./docs/fav.png" />
   </head>
   <body>
-    <div id="gameConsole" class="console">
-      <strong>Game Log:</strong><br />
+    <div id="gameConsole" class="console"><strong>Game Log:</strong><br /></div>
+    <div>
+      <button onclick="saveGame()">Save</button>
+      <button onclick="loadGame()">Load</button>
+      <button onclick="localStorage.clear(); location.reload();">Reset Game</button>
+      <p id="saveStatus"></p>
     </div>
 
     <div class="container">
@@ -18,7 +22,7 @@
       <button onclick="collectPollen()">Collect Pollen</button><br />
 
       <div class="section">
-        <h3>Manufacture</h3>
+        <h3>Production</h3>
         <p id="PollenPerSec">Pollen Per Second: 0</p>
         <p id="nbHoney">Honey: 0</p>
         <button onclick="makeHoney()">Make Honey</button>
@@ -32,16 +36,12 @@
         <medium>Price per honey: $5</medium><br /><br />
         <button onclick="buyBee()">Bees</button>
         <span id="bees">0</span><br />
-        <medium>Cost: $50</medium>
+        <medium>Cost: $50</medium><br />
+        <button onclick="buyQueen()">Queens</button>
+        <span id="queens">0</span><br />
+        <medium>Cost: $500</medium>
       </div>
     </div>
-
-      <footer>
-        <button onclick="saveGame()">Save</button>
-        <button onclick="loadGame()">Load</button>
-        <button onclick="localStorage.clear(); location.reload();">Reset Game</button>
-        <p id="saveStatus"></p>
-      </footer>
 
     <script src="./docs/main.js"></script>
   </body>

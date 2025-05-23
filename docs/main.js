@@ -8,6 +8,9 @@ let gameData = {
   bees: 0,
   beeCost: 50,
   pollenPerBees: 0,
+  queens: 0,
+  queenCost: 500,
+  queenMultiplier: 2,
 }
 
 function collectPollen() {
@@ -16,36 +19,64 @@ function collectPollen() {
 }
 
 function makeHoney() {
-  if (gameData.pollen >= gameData.honeyCost) {
-    gameData.pollen -= gameData.honeyCost
-    gameData.honey += 1
-    document.getElementById("nbHoney").innerHTML = "Honey: " + gameData.honey
-    document.getElementById("nbPollen").innerHTML = "Pollen: " + gameData.pollen
-    logToConsole("Made honey");
+  const maxHoney = Math.floor(gameData.pollen / gameData.honeyCost);
+  if (maxHoney > 0) {
+    gameData.pollen -= maxHoney * gameData.honeyCost;
+    gameData.honey += maxHoney;
+
+    document.getElementById("nbHoney").innerHTML = "Honey: " + gameData.honey;
+    document.getElementById("nbPollen").innerHTML = "Pollen: " + gameData.pollen;
+    logToConsole(`Made ${maxHoney} honey`);
   }
 }
+
 
 function sellHoney() {
-  if (gameData.honey >= 1) {
-    gameData.honey -= 1
-    gameData.money += gameData.honeyValue
-    document.getElementById("nbMoney").innerHTML = "Money: $" + gameData.money
-    document.getElementById("nbHoney").innerHTML = "Honey: " + gameData.honey
-    logToConsole("Sold honey");
+  const maxSell = gameData.honey;
+  if (maxSell > 0) {
+    gameData.honey -= maxSell;
+    gameData.money += maxSell * gameData.honeyValue;
+
+    document.getElementById("nbMoney").innerHTML = "Money: $" + gameData.money;
+    document.getElementById("nbHoney").innerHTML = "Honey: " + gameData.honey;
+    logToConsole(`Sold ${maxSell} honey`);
   }
 }
 
+
 function buyBee() {
-  if (gameData.money >= gameData.beeCost) {
-    gameData.money -= gameData.beeCost
-    gameData.bees += 1
-    gameData.pollenPerBees += 1
+  const maxBees = Math.floor(gameData.money / gameData.beeCost);
+  if (maxBees > 0) {
+    gameData.bees += maxBees;
+    gameData.money -= maxBees * gameData.beeCost;
+    recalculatePollenPerBees();
+
     document.getElementById("nbMoney").innerHTML = "Money: $" + gameData.money;
     document.getElementById("bees").innerHTML = gameData.bees;
-    document.getElementById("PollenPerSec").innerHTML = "Pollen Per Second: " + gameData.pollenPerBees;
-    logToConsole("Bought a bee");
+    logToConsole(`Bought ${maxBees} bee(s)`);
   }
 }
+
+
+function buyQueen() {
+  const maxQueens = Math.floor(gameData.money / gameData.queenCost);
+  if (maxQueens > 0) {
+    gameData.queens += maxQueens;
+    gameData.money -= maxQueens * gameData.queenCost;
+    recalculatePollenPerBees();
+
+    document.getElementById("nbMoney").innerHTML = "Money: $" + gameData.money;
+    document.getElementById("queens").innerHTML = gameData.queens;
+    logToConsole(`Bought ${maxQueens} queen(s)`);
+  }
+}
+
+
+function recalculatePollenPerBees() {
+  gameData.pollenPerBees = gameData.bees * Math.pow(gameData.queenMultiplier, gameData.queens);
+  document.getElementById("PollenPerSec").innerHTML = "Pollen Per Second: " + gameData.pollenPerBees;
+}
+
 
 setInterval(() => {
   gameData.pollen += gameData.pollenPerBees;
@@ -68,8 +99,10 @@ function loadGame() {
     document.getElementById("nbHoney").innerHTML = "Honey: " + gameData.honey;
     document.getElementById("nbMoney").innerHTML = "Money: $" + gameData.money;
     document.getElementById("bees").innerHTML = gameData.bees;
+    document.getElementById("queens").innerHTML = gameData.queens;
     document.getElementById("PollenPerSec").innerHTML = "Pollen Per Second: " + gameData.pollenPerBees;
     logToConsole("Game loaded");
+    recalculatePollenPerBees();
   }
 }
 
@@ -77,7 +110,6 @@ loadGame();
 
 function logToConsole(message) {
   const consoleDiv = document.getElementById("gameConsole");
-  const timestamp = new Date().toLocaleTimeString();
   consoleDiv.innerHTML += `> ${message}<br />`;
   consoleDiv.scrollTop = consoleDiv.scrollHeight;
 }
