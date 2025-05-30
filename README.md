@@ -9,7 +9,6 @@ Beekeep is a lightweight browser-based idle/incremental game where you collect p
 
 ## 📋 To Do List
 
-- Implement Queen system
-- Max function for selling/making/buying
+- New functionnalities coming soon !
 
 Become the best Beekeeper ! 🐝

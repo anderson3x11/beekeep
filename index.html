@@ -7,42 +7,71 @@
     <link rel="icon" type="image/x-icon" href="./docs/fav.png" />
   </head>
   <body>
-    <div id="gameConsole" class="console"><strong>> Welcome to Beekeep !</strong><br /></div>
-    <div class="saveLoad">
-      <button onclick="saveGame()">Save</button>
-      <button onclick="loadGame()">Load</button>
-      <button onclick="localStorage.clear(); location.reload();">Reset Game</button>
-      <p id="saveStatus"></p>
-    </div>
-
-    <div class="container">
-      <h2>
-        <p id="nbPollen">Pollen: 0</p>
-      </h2>
-      <button onclick="collectPollen()">Collect Pollen</button><br />
-
-      <div class="section">
-        <h3>Production</h3>
-        <medium id="PollenPerSec">Pollen Per Second: 0</medium><br />
-        <medium id="nbHoney">Honey: 0</medium><br />
-        <button onclick="makeHoney()">Make Honey</button>
-        <medium>Require: 10 Pollen</medium>
+    <div class="page-container">
+      <div id="gameConsole" class="console"><strong>> Welcome to Beekeep !</strong><br /></div>
+      <div class="saveLoad">
+        <button id="saveButton" onclick="game.saveGame()">Save</button>
+        <button id="loadButton" onclick="game.loadGame()">Load</button>
+        <button onclick="localStorage.clear(); location.reload();">Reset Game</button>
+        <p id="saveStatus"></p>
       </div>
 
-      <div class="section">
-        <h3>Business</h3>
-        <medium id="nbMoney">Money: $0</medium><br />
-        <button onclick="sellHoney()">Sell Honey</button>
-        <medium id="honeyValue">Price per honey: $5</medium><br />
-        <button onclick="makeMarketing()">Marketing</button>
-        <medium id="marketingLevel"></medium><br />
-        <medium id="marketingCost">Cost: $100</medium><br />
-        <button onclick="buyBee()">Bees</button>
-        <span id="bees">0</span><br />
-        <medium id="beeCost">Cost: $50</medium><br />
-        <button onclick="buyQueen()">Queens</button>
-        <span id="queens">0</span><br />
-        <medium id="queenCost">Cost: $500</medium><br />
+      <div class="game-container">
+        <div class="pollen-section">
+          <h2>
+            <p id="nbPollen"></p>
+          </h2>
+          <button id="collectPollenButton">Collect Pollen</button>
+        </div>
+
+        <div class="columns-container">
+          <div class="column">
+            <div class="section">
+              <h3>Production</h3>
+              <div id="PollenPerSec"></div>
+
+              <div class="upgrade-section">
+                <h4>Bee Workers</h4>
+                <button id="buyBeeButton">Hire Bee</button>
+                <div id="bees"></div>
+                <div id="beeCost"></div>
+              </div>
+
+              <div class="upgrade-section">
+                <h4>Queen Bees</h4>
+                <button id="buyQueenButton">Hire Queen</button>
+                <div id="queens"></div>
+                <div id="queenCost"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="column">
+            <div class="section">
+              <h3>Honey Management</h3>
+              <div id="nbHoney"></div>
+              <button id="makeHoneyButton">Make Honey</button>
+              <div class="cost-info">Cost: 10 Pollen per Honey</div>
+              
+              <div class="honey-sales">
+                <div id="nbMoney"></div>
+                <button id="sellHoneyButton">Sell Honey</button>
+                <div id="honeyValue"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="column">
+            <div class="section">
+              <h3>Marketing</h3>
+              <div class="upgrade-section">
+                <button id="marketingButton">Upgrade Marketing</button>
+                <div id="marketingLevel"></div>
+                <div id="marketingCost"></div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 

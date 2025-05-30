@@ -1,134 +1,153 @@
-let gameData = {
-  pollen: 0,
-  pollenperclick: 1,
-  honey: 0,
-  honeyCost: 10,
-  honeyValue: 5,
-  marketingLevel: 0,
-  marketingCost: 100,
-  marketingCostGrowth: 1.5,
-  money: 0,
-  bees: 0,
-  beeCost: 50,
-  beeCostGrowth: 1.15,
-  pollenPerBees: 0,
-  queens: 0,
-  queenCost: 500,
-  queenCostGrowth: 1.25,
-  queenMultiplier: 2,
-}
+class Game {
+  constructor() {
+    this.data = {
+      pollen: 0,
+      pollenperclick: 1,
+      honey: 0,
+      honeyCost: 10,
+      honeyValue: 5,
+      marketingLevel: 0,
+      marketingCost: 100,
+      marketingCostGrowth: 1.5,
+      money: 0,
+      bees: 0,
+      beeCost: 50,
+      beeCostGrowth: 1.15,
+      pollenPerBees: 0,
+      queens: 0,
+      queenCost: 500,
+      queenCostGrowth: 1.25,
+      queenMultiplier: 2,
+    };
 
-function collectPollen() {
-  gameData.pollen += gameData.pollenperclick
-  document.getElementById("nbPollen").innerHTML = "Pollen: " + gameData.pollen
-}
+    this.initializeGame();
+  }
 
-function makeHoney() {
-  const maxHoney = Math.floor(gameData.pollen / gameData.honeyCost);
-  if (maxHoney > 0) {
-    gameData.pollen -= maxHoney * gameData.honeyCost;
-    gameData.honey += maxHoney;
+  initializeGame() {
+    document.getElementById("collectPollenButton")?.addEventListener("click", () => this.collectPollen());
+    document.getElementById("makeHoneyButton")?.addEventListener("click", () => this.makeHoney());
+    document.getElementById("sellHoneyButton")?.addEventListener("click", () => this.sellHoney());
+    document.getElementById("marketingButton")?.addEventListener("click", () => this.makeMarketing());
+    document.getElementById("buyBeeButton")?.addEventListener("click", () => this.buyBee());
+    document.getElementById("buyQueenButton")?.addEventListener("click", () => this.buyQueen());
 
-    document.getElementById("nbHoney").innerHTML = "Honey: " + gameData.honey;
-    document.getElementById("nbPollen").innerHTML = "Pollen: " + gameData.pollen;
-    logToConsole(`Made ${maxHoney} honey`);
+    setInterval(() => this.autoCollectPollen(), 1000);
+    setInterval(() => this.saveGame(), 30000);
+
+    this.loadGame();
+  }
+
+  collectPollen() {
+    this.data.pollen += this.data.pollenperclick;
+    this.updateDisplay();
+  }
+
+  makeHoney() {
+    const maxHoney = Math.floor(this.data.pollen / this.data.honeyCost);
+    if (maxHoney > 0) {
+      this.data.pollen -= maxHoney * this.data.honeyCost;
+      this.data.honey += maxHoney;
+      this.updateDisplay();
+      this.logToConsole(`Made ${maxHoney} honey`);
+    }
+  }
+
+  sellHoney() {
+    const maxSell = this.data.honey;
+    if (maxSell > 0) {
+      this.data.honey -= maxSell;
+      this.data.money += maxSell * this.data.honeyValue;
+      this.updateDisplay();
+      this.logToConsole(`Sold ${maxSell} honey`);
+    }
+  }
+
+  makeMarketing() {
+    if (this.data.money >= this.data.marketingCost) {
+      this.data.money -= this.data.marketingCost;
+      this.data.marketingLevel += 1;
+      this.data.honeyValue += 1;
+      this.data.marketingCost = Math.ceil(this.data.marketingCost * this.data.marketingCostGrowth);
+      this.updateDisplay();
+      this.logToConsole(`Invested in marketing. Honey now sells for $${this.formatNumber(this.data.honeyValue)}`);
+    }
+  }
+
+  buyBee() {
+    if (this.data.money >= this.data.beeCost) {
+      this.data.money -= this.data.beeCost;
+      this.data.bees += 1;
+      this.data.pollenPerBees += 1;
+      this.data.beeCost = Math.floor(this.data.beeCost * this.data.beeCostGrowth);
+      this.recalculatePollenPerBees();
+      this.updateDisplay();
+      this.logToConsole("Bought a bee");
+    }
+  }
+
+  buyQueen() {
+    if (this.data.money >= this.data.queenCost) {
+      this.data.money -= this.data.queenCost;
+      this.data.queens += 1;
+      this.data.queenCost = Math.floor(this.data.queenCost * this.data.queenCostGrowth);
+      this.recalculatePollenPerBees();
+      this.updateDisplay();
+      this.logToConsole("Bought a queen");
+    }
+  }
+
+  recalculatePollenPerBees() {
+    this.data.pollenPerBees = this.data.bees * Math.pow(this.data.queenMultiplier, this.data.queens);
+    this.updateDisplay();
+  }
+
+  autoCollectPollen() {
+    this.data.pollen += this.data.pollenPerBees;
+    this.updateDisplay();
+  }
+
+  saveGame() {
+    localStorage.setItem("beekeepSave", JSON.stringify(this.data));
+  }
+
+  loadGame() {
+    const savedGame = localStorage.getItem("beekeepSave");
+    if (savedGame) {
+      this.data = JSON.parse(savedGame);
+      this.recalculatePollenPerBees();
+      this.updateDisplay();
+      this.logToConsole("Game loaded");
+    }
+  }
+
+  updateDisplay() {
+    document.getElementById("nbPollen").innerHTML = "Pollen: " + this.formatNumber(this.data.pollen);
+    document.getElementById("nbHoney").innerHTML = "Honey: " + this.formatNumber(this.data.honey);
+    document.getElementById("nbMoney").innerHTML = "Money: $" + this.formatNumber(this.data.money);
+    document.getElementById("bees").innerHTML = this.data.bees;
+    document.getElementById("queens").innerHTML = this.data.queens;
+    document.getElementById("PollenPerSec").innerHTML = "Pollen Per Second: " + this.formatNumber(this.data.pollenPerBees);
+    document.getElementById("marketingLevel").innerHTML = "Level: " + this.data.marketingLevel;
+    document.getElementById("honeyValue").innerHTML = "Price per honey: $" + this.formatNumber(this.data.honeyValue);
+    document.getElementById("marketingCost").innerHTML = "Cost: $" + this.formatNumber(this.data.marketingCost);
+    document.getElementById("beeCost").innerHTML = "Cost: $" + this.formatNumber(this.data.beeCost);
+    document.getElementById("queenCost").innerHTML = "Cost: $" + this.formatNumber(this.data.queenCost);
+  }
+
+  logToConsole(message) {
+    const consoleDiv = document.getElementById("gameConsole");
+    consoleDiv.innerHTML += `> ${message}<br />`;
+    consoleDiv.scrollTop = consoleDiv.scrollHeight;
+  }
+
+  formatNumber(num) {
+    if (num < 1000) return num;
+    const units = ['K', 'M', 'B', 'T'];
+    const order = Math.floor(Math.log10(num) / 3);
+    const unitName = units[order - 1];
+    const value = num / Math.pow(1000, order);
+    return value.toFixed(1) + unitName;
   }
 }
 
-function sellHoney() {
-  const maxSell = gameData.honey;
-  if (maxSell > 0) {
-    gameData.honey -= maxSell;
-    gameData.money += maxSell * gameData.honeyValue;
-
-    document.getElementById("nbMoney").innerHTML = "Money: $" + gameData.money;
-    document.getElementById("nbHoney").innerHTML = "Honey: " + gameData.honey;
-    logToConsole(`Sold ${maxSell} honey`);
-  }
-}
-
-function makeMarketing() {
-  if (gameData.money >= gameData.marketingCost) {
-    gameData.money -= gameData.marketingCost;
-    gameData.marketingLevel += 1;
-    gameData.honeyValue += 1;
-    gameData.marketingCost = Math.ceil(gameData.marketingCost * gameData.marketingCostGrowth);
-
-    document.getElementById("nbMoney").innerHTML = "Money: $" + gameData.money;
-    document.getElementById("honeyValue").innerHTML = "Price per honey: $" + gameData.honeyValue;
-    document.getElementById("marketingLevel").innerHTML = "Level: " + gameData.marketingLevel;
-    document.getElementById("marketingCost").innerHTML = "Cost: $" + gameData.marketingCost;
-    logToConsole(`Invested in marketing. Honey now sells for $${gameData.honeyValue}`);
-  }
-}
-
-
-function buyBee() {
-  if (gameData.money >= gameData.beeCost) {
-    gameData.money -= gameData.beeCost
-    gameData.bees += 1
-    gameData.pollenPerBees += 1
-    gameData.beeCost = Math.floor(gameData.beeCost * gameData.beeCostGrowth)
-    document.getElementById("nbMoney").innerHTML = "Money: $" + gameData.money;
-    document.getElementById("bees").innerHTML = gameData.bees;
-    document.getElementById("PollenPerSec").innerHTML = "Pollen Per Second: " + gameData.pollenPerBees;
-    document.getElementById("beeCost").innerHTML = "Cost: $" + gameData.beeCost;
-    logToConsole("Bought a bee");
-  }
-}
-
-
-function buyQueen() {
-  if (gameData.money >= gameData.queenCost) {
-    gameData.money -= gameData.queenCost;
-    gameData.queens += 1;
-    gameData.queenCost = Math.floor(gameData.queenCost * gameData.queenCostGrowth);
-    recalculatePollenPerBees();
-    document.getElementById("nbMoney").innerHTML = "Money: $" + gameData.money;
-    document.getElementById("queens").innerHTML = gameData.queens;
-    document.getElementById("queenCost").innerHTML = "Cost: $" + gameData.queenCost;
-    logToConsole("Bought a queen");
-  }
-}
-
-
-function recalculatePollenPerBees() {
-  gameData.pollenPerBees = gameData.bees * Math.pow(gameData.queenMultiplier, gameData.queens);
-  document.getElementById("PollenPerSec").innerHTML = "Pollen Per Second: " + gameData.pollenPerBees;
-}
-
-
-setInterval(() => {
-  gameData.pollen += gameData.pollenPerBees;
-  document.getElementById("nbPollen").innerHTML = "Pollen: " + gameData.pollen;
-}, 1000);
-
-function saveGame() {
-  localStorage.setItem("beekeepSave", JSON.stringify(gameData));
-}
-
-setInterval(saveGame, 30000);
-
-function loadGame() {
-  const savedGame = localStorage.getItem("beekeepSave");
-  if (savedGame) {
-    gameData = JSON.parse(savedGame);
-
-    document.getElementById("nbPollen").innerHTML = "Pollen: " + gameData.pollen;
-    document.getElementById("nbHoney").innerHTML = "Honey: " + gameData.honey;
-    document.getElementById("nbMoney").innerHTML = "Money: $" + gameData.money;
-    document.getElementById("bees").innerHTML = gameData.bees;
-    document.getElementById("queens").innerHTML = gameData.queens;
-    document.getElementById("PollenPerSec").innerHTML = "Pollen Per Second: " + gameData.pollenPerBees;
-    logToConsole("Game loaded");
-    recalculatePollenPerBees();
-  }
-}
-
-loadGame();
-
-function logToConsole(message) {
-  const consoleDiv = document.getElementById("gameConsole");
-  consoleDiv.innerHTML += `> ${message}<br />`;
-  consoleDiv.scrollTop = consoleDiv.scrollHeight;
-}
+const game = new Game();
