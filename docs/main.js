@@ -4,20 +4,20 @@ class Game {
       pollen: 0,
       pollenperclick: 1,
       honey: 0,
-      honeyCost: 10,
-      honeyValue: 5,
+      honeyCost: 15,
+      honeyValue: 3,
       marketingLevel: 0,
-      marketingCost: 100,
-      marketingCostGrowth: 1.5,
+      marketingCost: 150,
+      marketingCostGrowth: 1.8,
       money: 0,
       bees: 0,
-      beeCost: 50,
-      beeCostGrowth: 1.15,
+      beeCost: 75,
+      beeCostGrowth: 1.3,
       pollenPerBees: 0,
       queens: 0,
-      queenCost: 500,
-      queenCostGrowth: 1.25,
-      queenMultiplier: 2,
+      queenCost: 750,
+      queenCostGrowth: 1.45,
+      queenMultiplier: 1.5,
     };
 
     this.initializeGame();
@@ -66,7 +66,7 @@ class Game {
     if (this.data.money >= this.data.marketingCost) {
       this.data.money -= this.data.marketingCost;
       this.data.marketingLevel += 1;
-      this.data.honeyValue += 1;
+      this.data.honeyValue += 0.5;
       this.data.marketingCost = Math.ceil(this.data.marketingCost * this.data.marketingCostGrowth);
       this.updateDisplay();
       this.logToConsole(`Invested in marketing. Honey now sells for $${this.formatNumber(this.data.honeyValue)}`);
@@ -97,7 +97,7 @@ class Game {
   }
 
   recalculatePollenPerBees() {
-    this.data.pollenPerBees = this.data.bees * Math.pow(this.data.queenMultiplier, this.data.queens);
+    this.data.pollenPerBees = this.data.bees * (1 + (this.data.queens * 0.5));
     this.updateDisplay();
   }
 
